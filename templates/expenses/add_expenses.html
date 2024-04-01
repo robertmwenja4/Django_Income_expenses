@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+        {% include "partials/_messages.html" %}
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'expenses' %}">Expenses</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Add Expenses</li>
+            </ol>
+          </nav>
+
+          <div class="card">
+              <div class="card-body">
+                    <form method="post" action="{% url 'add-expenses' %}">
+                        {% csrf_token %}
+                        <div class="form-group mt-3">
+                            <label>Amount</label>
+                            <input type="number" class="form-control form-control-sm" id="amount" value="{{values.amount}}" name="amount" />
+                        </div>
+                        <div class="form-group mt-3">
+                            <label>Description</label>
+                            <input type="text" class="form-control form-control-sm" value="{{values.description}}" name="description" />
+                        </div>
+                        <div class="form-group mt-3">
+                            <label>Category</label>
+                            <select id="category" name="category" class="form-select">
+                                <option value="">Select Category</option>
+                                {% for category in categories %}
+
+                                <option value="{{category.name}}">{{category.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label>Date</label>
+                            <input type="date" class="form-control form-control-sm" name="date" />
+                        </div>
+                        <div class="form-group mt-3">
+                            <button class="btn btn-primary addExpenseBtn" type="submit">Create</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+        {% include "partials/_messages.html" %}
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'income' %}">Income</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Edit Income</li>
+            </ol>
+          </nav>
+
+          <div class="card">
+              <div class="card-body">
+                    <form method="post" action="{% url 'edit-income' income.id %}">
+                        {% csrf_token %}
+                        <div class="form-group mt-3">
+                            <label>Amount</label>
+                            <input type="number" class="form-control form-control-sm" id="amount" value="{{values.amount}}" name="amount" />
+                        </div>
+                        <div class="form-group mt-3">
+                            <label>Description</label>
+                            <input type="text" class="form-control form-control-sm" value="{{values.description}}" name="description" />
+                        </div>
+                        <div class="form-group mt-3">
+                            <label>Source</label>
+                            <select id="source" name="source" class="form-select">
+                                <option value="">Select Source</option>
+                                {% for source in sources %}
+
+                                <option value="{{source.name}}" {% if source.name == values.source %}selected{% endif %}>{{source.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label>Date</label>
+                            <input type="date" class="form-control form-control-sm" value="{{income.date |date:'Y-m-d' }}" name="date" />
+                        </div>
+                        <div class="form-group mt-3">
+                            <button class="btn btn-primary addExpenseBtn" type="submit">Create</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+    </div>
+
+{% endblock %}
