@@ -146,13 +146,14 @@ class RequestPasswordResetEmail(View):
             messages.error(request, "Please Enter Valiad Email!!")
             return render(request, 'authentication/reset-password.html', context)
         user = User.objects.filter(email=email)
+        print(user[0])
         if user.exists():
             uidb64 = urlsafe_base64_encode(force_bytes(user[0].pk))
             domain = get_current_site(request).domain
-            link = reverse('activate', kwargs={'uidb64': uidb64, 'token': PasswordResetTokenGenerator().make_token(user[0])})
-            activate_url = "http://"+domain+link
+            link = reverse('reset-password', kwargs={'uidb64': uidb64, 'token': PasswordResetTokenGenerator().make_token(user[0])})
+            reset_url = "http://"+domain+link
             email_subject = "Reset Your Account Password"
-            email_body = "Hi "+user[0].username+ " Please use this link to reset your account password\n" + activate_url
+            email_body = "Hi there Please use this link to reset your account password\n" + reset_url
             email = EmailMessage(
                 email_subject,
                 email_body,
@@ -164,3 +165,10 @@ class RequestPasswordResetEmail(View):
         
         messages.success(request, "Reset Email Sent Successfully!!")
         return render(request, 'authentication/reset-password.html')
+    
+class CompleteResetPassword(View):
+    def get(self, request, uidb64, token):
+        return render(request, 'authentication/set-new-password.html')
+    def post(self, request, uidb64, token):
+        return render(request, 'authentication/set-new-password.html')
+        
